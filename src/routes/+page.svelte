@@ -46,10 +46,28 @@
   }
 
   async function copyAll() {
-    const text = party.map((p) => p.display_text).join("\n\n");
-    await navigator.clipboard.writeText(text);
-    copied = true;
-    setTimeout(() => (copied = false), 2000);
+    if (!currentPath || loading) return;
+
+    loading = true;
+    error = "";
+    try {
+      // Re-load from disk every time you copy, so the clipboard always reflects
+      // the latest state of the save file without re-opening the file dialog.
+      const latestParty = await invoke<Pokemon[]>("parse_sav_file", {
+        path: currentPath,
+      });
+      party = latestParty;
+
+      const text = latestParty.map((p) => p.display_text).join("\n\n");
+      await navigator.clipboard.writeText(text);
+
+      copied = true;
+      setTimeout(() => (copied = false), 2000);
+    } catch (e) {
+      error = String(e);
+    } finally {
+      loading = false;
+    }
   }
 
   onMount(async () => {
@@ -72,8 +90,12 @@
       {loading ? "Loading..." : "Select .sav File"}
     </button>
     {#if party.length > 0}
-      <button onclick={copyAll} class="copy-btn">
-        {copied ? "Copied!" : "Copy All"}
+      <button
+        onclick={copyAll}
+        class="copy-btn"
+        disabled={loading || !currentPath}
+      >
+        {loading ? "Refreshing..." : copied ? "Copied!" : "Copy All"}
       </button>
     {/if}
   </div>
