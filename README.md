@@ -1,7 +1,14 @@
-# Tauri + SvelteKit + TypeScript
+# Radical Red Poke Exporter
 
-This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
+A desktop app that reads Radical Red `.sav` files and exports your party Pokemon in Showdown-compatible text format. Load your save, see your team, and copy it straight into Pokemon Showdown.
 
-## Recommended IDE Setup
+## How It Works
 
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+1. Open the app and select your Radical Red `.sav` file
+2. Your party of up to 6 Pokemon is parsed and displayed
+3. Copy individual Pokemon or your full team in Showdown format
+
+## Built With
+
+- **Tauri 2** (Rust backend + SvelteKit frontend)
+- Rust handles binary `.sav` parsing; the frontend displays the results
